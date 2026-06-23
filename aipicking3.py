@@ -81,7 +81,7 @@ data=[
     {"text": "Shutdown the bot", "label": 2}
 ]
 random.shuffle(data)
-JINA_TOKEN="your_jina_token_here"
+JINA_TOKEN="token"
 jina_url="https://api.jina.ai/v1/embeddings"
 headers={
     "Authorization" :f"Bearer {JINA_TOKEN}",
@@ -119,7 +119,8 @@ class Brain(nn.Module):
         x=self.boss(x)
         return x
 brain_on=Brain()
-edit=torch.optim.Adam(brain_on.parameters(),lr=0.01)
+
+edit=torch.optim.Adam(brain_on.parameters(),lr=0.01)
 creation=nn.CrossEntropyLoss()
 for epoch in range (200):
     edit.zero_grad()
@@ -141,7 +142,7 @@ with torch.no_grad():
 torch.save(brain_on.state_dict() ,"brain3.pth")
 labels_map = {0: "Manga/Manhwa", 1: "Social/Chat", 2: "System/Control"}
 
-print("\n--- BRAIN STRESS TEST ---")
+print("test")
 print("Type 'quit' to stop.")
 
 while True:
@@ -151,7 +152,7 @@ while True:
 
     payload = {"model": "jina-embeddings-v2-base-en", "input": [user_input]}
     res = requests.post(url=jina_url, headers=headers, json=payload).json()
-    embedding = torch.tensor(res["data"][0]["embedding"]).unsqueeze(0) # unsqueeze adds the batch dimension
+    embedding = torch.tensor(res["data"][0]["embedding"]).unsqueeze(0) 
 
     brain_on.eval()
     with torch.no_grad():
